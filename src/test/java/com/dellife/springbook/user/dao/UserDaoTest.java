@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -65,6 +66,17 @@ class UserDaoTest {
         System.out.println(dao1);
         System.out.println(dao2);
         assertThat(dao1.equals(dao2)).isTrue();
+    }
 
+    @DisplayName("getConnection을 count한다")
+    @Test
+    void countingConnectionMaker() throws SQLException, ClassNotFoundException {
+        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+        ConnectionMaker connectionMaker = context.getBean("countingConnectionMaker", ConnectionMaker.class);
+        CountingConnectionMaker countingConnectionMaker = new CountingConnectionMaker(connectionMaker);
+        Connection connection = countingConnectionMaker.makeConnection();
+        System.out.println(countingConnectionMaker.getCounter());
+
+        assertThat(countingConnectionMaker.getCounter()).isEqualTo(1);
     }
 }
