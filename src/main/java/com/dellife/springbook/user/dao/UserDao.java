@@ -4,6 +4,7 @@ import com.dellife.springbook.user.domain.User;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,16 +14,16 @@ import java.sql.SQLException;
 @NoArgsConstructor
 public class UserDao {
 
+    private DataSource dataSource;
     private ConnectionMaker connectionMaker;
-    private Connection c;
     private User user;
 
     public UserDao(ConnectionMaker connectionMaker) {
         this.connectionMaker = connectionMaker;
     }
 
-    public void add(User user) throws ClassNotFoundException, SQLException {
-        Connection c = connectionMaker.makeConnection();
+    public void add(User user) throws SQLException {
+        Connection c = dataSource.getConnection();
 
         PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?, ?, ?)");
         ps.setString(1, user.getId());
@@ -35,8 +36,8 @@ public class UserDao {
         c.close();
     }
 
-    public User get(String id) throws ClassNotFoundException, SQLException {
-        Connection c = connectionMaker.makeConnection();
+    public User get(String id) throws SQLException {
+        Connection c = dataSource.getConnection();
 
         PreparedStatement ps = c.prepareStatement("select * from users where id = ?");
         ps.setString(1, id);
