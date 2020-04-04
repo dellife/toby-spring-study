@@ -42,4 +42,29 @@ class UserDaoTest {
         assertThat(user.getName()).isEqualTo("sehee");
         assertThat(user.getPassword()).isEqualTo("sehee123");
     }
+
+    @DisplayName("직접 생성한 dao는 매번 새로운 오브젝트가 만들어진다.")
+    @Test
+    void getDaoFactory() {
+        DaoFactory factory = new DaoFactory();
+        UserDao dao1 = factory.userDao();
+        UserDao dao2 = factory.userDao();
+
+        System.out.println(dao1);
+        System.out.println(dao2);
+        assertThat(dao1.equals(dao2)).isFalse();
+    }
+
+    @DisplayName("스프링컨텍스트로부터 가져온 오브젝트는 동일하다")
+    @Test
+    void getDaoFactory2() {
+        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+        UserDao dao1 = context.getBean("userDao", UserDao.class);
+        UserDao dao2 = context.getBean("userDao", UserDao.class);
+
+        System.out.println(dao1);
+        System.out.println(dao2);
+        assertThat(dao1.equals(dao2)).isTrue();
+
+    }
 }
