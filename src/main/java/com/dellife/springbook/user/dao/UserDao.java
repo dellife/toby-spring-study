@@ -1,12 +1,16 @@
 package com.dellife.springbook.user.dao;
 
 import com.dellife.springbook.user.domain.User;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Setter
+@NoArgsConstructor
 public class UserDao {
 
     private ConnectionMaker connectionMaker;
