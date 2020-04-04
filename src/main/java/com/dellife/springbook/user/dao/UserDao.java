@@ -10,6 +10,8 @@ import java.sql.SQLException;
 public class UserDao {
 
     private ConnectionMaker connectionMaker;
+    private Connection c;
+    private User user;
 
     public UserDao(ConnectionMaker connectionMaker) {
         this.connectionMaker = connectionMaker;
@@ -37,7 +39,7 @@ public class UserDao {
 
         ResultSet rs = ps.executeQuery();
         rs.next();
-        User user = new User();
+        this.user = new User();
         user.setId(rs.getString("id"));
         user.setName(rs.getString("name"));
         user.setPassword(rs.getString("password"));
