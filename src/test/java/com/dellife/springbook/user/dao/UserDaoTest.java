@@ -15,7 +15,8 @@ class UserDaoTest {
     @Test
     public void addUser() throws SQLException, ClassNotFoundException {
         //given
-        UserDao dao = new UserDao();
+        ConnectionMaker connectionMaker = new DConnectionMaker();
+        UserDao dao = new UserDao(connectionMaker);
 
         User user = new User();
         user.setId("dellife");
@@ -32,7 +33,8 @@ class UserDaoTest {
     @DisplayName("유저를 조회한다.")
     @Test
     void getUser() throws SQLException, ClassNotFoundException {
-        UserDao dao = new UserDao();
+        ConnectionMaker connectionMaker = new DConnectionMaker();
+        UserDao dao = new UserDao(connectionMaker);
 
         User user = dao.get("dellife");
 
