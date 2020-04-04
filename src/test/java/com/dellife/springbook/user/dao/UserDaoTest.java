@@ -72,11 +72,13 @@ class UserDaoTest {
     @Test
     void countingConnectionMaker() throws SQLException, ClassNotFoundException {
         ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
-        ConnectionMaker connectionMaker = context.getBean("countingConnectionMaker", ConnectionMaker.class);
-        CountingConnectionMaker countingConnectionMaker = new CountingConnectionMaker(connectionMaker);
-        Connection connection = countingConnectionMaker.makeConnection();
+        CountingConnectionMaker countingConnectionMaker = context.getBean("connectionMaker", CountingConnectionMaker.class);
+        UserDao userDao = new UserDao(countingConnectionMaker);
+        userDao.get("dellife");
+        userDao.get("dellife");
+        userDao.get("dellife");
         System.out.println(countingConnectionMaker.getCounter());
 
-        assertThat(countingConnectionMaker.getCounter()).isEqualTo(1);
+        assertThat(countingConnectionMaker.getCounter()).isEqualTo(3);
     }
 }
