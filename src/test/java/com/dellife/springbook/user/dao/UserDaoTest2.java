@@ -3,13 +3,8 @@ package com.dellife.springbook.user.dao;
 import com.dellife.springbook.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -17,12 +12,8 @@ import java.sql.SQLException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = DaoFactory.class)
-@DirtiesContext
 class UserDaoTest2 {
 
-    @Autowired
     private UserDao dao;
 
     private User user1;
@@ -31,6 +22,7 @@ class UserDaoTest2 {
 
     @BeforeEach
     void setUp() {
+        dao = new UserDao();
         DataSource dataSource = new SingleConnectionDataSource(
                 "jdbc:mysql://localhost:3306/settler", "admin", "admin123", true);
         dao.setDataSource(dataSource);
