@@ -3,7 +3,6 @@ package com.dellife.springbook.user.dao;
 import com.dellife.springbook.user.domain.User;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.GenericApplicationContext;
 
 import java.sql.SQLException;
 
@@ -19,16 +18,21 @@ class UserDaoTest2 {
         user.setName("sehee");
         user.setPassword("password");
 
-        dao.add(user);
+//        dao.add(user);
 
         System.out.println(user.getId() + " 등록 성공");
 
         User user2 = dao.get(user.getId());
 
-        System.out.println(user2.getName());
-        System.out.println(user2.getPassword());
+        if(!user.getName().equals(user2.getName())) {
+            System.out.println("테스트 실패 (name)");
+        } else if(!user.getPassword().equals(user2.getPassword())) {
+            System.out.println("테스트 실패 (password)");
+        } else {
+        System.out.println(user.getId() + " 조회 테스트 성공");
 
-        System.out.println(user.getId() + " 조회 성공");
+        }
+
     }
 
 }
