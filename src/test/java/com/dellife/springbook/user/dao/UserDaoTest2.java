@@ -1,6 +1,7 @@
 package com.dellife.springbook.user.dao;
 
 import com.dellife.springbook.user.domain.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -13,11 +14,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserDaoTest2 {
 
+    private UserDao dao;
+
+    @BeforeEach
+    void setUp() {
+        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+        this.dao = context.getBean("userDao", UserDao.class);
+    }
+
     @Test
     void addAndGet() throws SQLException {
-        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
-
-        UserDao dao = context.getBean("userDao", UserDao.class);
 
         User user1 = new User("sehee", "aaa", "asdfasdf");
         User user2 = new User("dellife", "bbb", "asdfasdf");
@@ -42,9 +48,6 @@ class UserDaoTest2 {
 
     @Test
     void count() throws SQLException {
-        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
-
-        UserDao dao = context.getBean("userDao", UserDao.class);
 
         User user1 = new User("sehee", "ㅁㅁㅁ", "asdf");
         User user2 = new User("unique", "ㄴㄴㄴ", "asdasd");
@@ -66,9 +69,6 @@ class UserDaoTest2 {
 
     @Test
     void getUserFailure() throws SQLException {
-        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
-
-        UserDao dao = context.getBean("userDao", UserDao.class);
         dao.deleteAll();
         assertThat(dao.getCount()).isEqualTo(0);
 
