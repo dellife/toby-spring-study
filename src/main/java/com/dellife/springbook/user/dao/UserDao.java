@@ -3,6 +3,7 @@ package com.dellife.springbook.user.dao;
 import com.dellife.springbook.user.domain.User;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -36,24 +37,30 @@ public class UserDao {
         c.close();
     }
 
-    public User get(String id) throws SQLException {
+    public User get(String id) throws SQLException, EmptyResultDataAccessException {
         Connection c = dataSource.getConnection();
 
         PreparedStatement ps = c.prepareStatement("select * from users where id = ?");
         ps.setString(1, id);
 
         ResultSet rs = ps.executeQuery();
-        rs.next();
-        this.user = new User();
-        user.setId(rs.getString("id"));
-        user.setName(rs.getString("name"));
-        user.setPassword(rs.getString("password"));
+        if (rs.next()) {
+            this.user = new User();
+            user.setId(rs.getString("id"));
+            user.setName(rs.getString("name"));
+            user.setPassword(rs.getString("password"));
+        }
 
         rs.close();
         ps.close();
         c.close();
 
+        if (user == null) {
+            throw new EmptyResultDataAccessException(1);
+        }
+
         return user;
+
     }
 
     public void deleteAll() throws SQLException {
