@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -20,18 +19,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class UserDaoTest2 {
 
     @Autowired
-    private ApplicationContext context;
-
     private UserDao dao;
+
     private User user1;
     private User user2;
     private User user3;
 
     @BeforeEach
     void setUp() {
-        System.out.println(this.context);
-        System.out.println(this);
-        this.dao = context.getBean("userDao", UserDao.class);
         this.user1 = new User("sehee", "ㅁㅁㅁ", "asdf");
         this.user2 = new User("unique", "ㄴㄴㄴ", "asdasd");
         this.user3 = new User("dellife", "ㅇㅇㅇ", "asdasd");
