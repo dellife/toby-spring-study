@@ -34,4 +34,28 @@ class UserDaoTest2 {
         assertThat(user2.getPassword()).isEqualTo(user.getPassword());
 
     }
+
+    @Test
+    void count() throws SQLException {
+        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+
+        UserDao dao = context.getBean("userDao", UserDao.class);
+
+        User user1 = new User("sehee", "ㅁㅁㅁ", "asdf");
+        User user2 = new User("unique", "ㄴㄴㄴ", "asdasd");
+        User user3 = new User("dellife", "ㅇㅇㅇ", "asdasd");
+
+        dao.deleteAll();
+        assertThat(dao.getCount()).isEqualTo(0);
+
+        dao.add(user1);
+        assertThat(dao.getCount()).isEqualTo(1);
+
+        dao.add(user2);
+        assertThat(dao.getCount()).isEqualTo(2);
+
+        dao.add(user3);
+        assertThat(dao.getCount()).isEqualTo(3);
+
+    }
 }
