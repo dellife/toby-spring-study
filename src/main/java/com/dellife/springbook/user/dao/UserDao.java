@@ -19,14 +19,10 @@ import java.util.List;
 @NoArgsConstructor
 public class UserDao {
 
-    private DataSource dataSource;
-    private ConnectionMaker connectionMaker;
-    private User user;
     private JdbcTemplate jdbcTemplate;
 
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.dataSource = dataSource;
     }
 
     public void add(final User user) throws SQLException {
