@@ -7,16 +7,30 @@ import java.io.IOException;
 public class Calculator {
 
     public Integer calcSum(String filepath) throws IOException {
+        BufferedReaderCallback sumCallback =
+                new BufferedReaderCallback() {
+                    @Override
+                    public Integer doSometingWithReader(BufferedReader br) throws IOException {
+                        Integer sum = 0;
+                        String line = null;
+                        while ((line = br.readLine()) != null) {
+                            sum += Integer.valueOf(line);
+                        }
+
+                        return sum;
+                    }
+                };
+
+        return fileReadTemplate(filepath, sumCallback);
+
+    }
+
+    public Integer fileReadTemplate(String filepath, BufferedReaderCallback callback) throws IOException {
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(filepath));
-            Integer sum = 0;
-            String line = null;
-            while ((line = br.readLine()) != null) {
-                sum += Integer.valueOf(line);
-            }
-
-            return sum;
+            int ret = callback.doSometingWithReader(br);
+            return ret;
         } catch (IOException e) {
             System.out.println(e.getMessage());
             throw e;
@@ -30,5 +44,22 @@ public class Calculator {
             }
         }
 
+    }
+
+    public int calcMutiply(String numFilepath) throws IOException {
+        BufferedReaderCallback multiplyCallbafck =
+                new BufferedReaderCallback() {
+                    @Override
+                    public Integer doSometingWithReader(BufferedReader br) throws IOException {
+                        Integer multiply = 1;
+                        String line = null;
+                        while ((line = br.readLine()) != null) {
+                            multiply *= Integer.valueOf(line);
+                        }
+
+                        return multiply;
+                    }
+                };
+        return fileReadTemplate(numFilepath, multiplyCallbafck);
     }
 }
