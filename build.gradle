@@ -37,5 +37,4 @@ dependencies {
     testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.0')
     compile('mysql:mysql-connector-java')
 
-
 }
