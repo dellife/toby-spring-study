@@ -29,4 +29,10 @@ class CalculatorTest {
         int sum = calculator.calcMutiply(numFilepath);
         assertThat(sum).isEqualTo(24);
     }
+
+    @Test
+    void concatenateStrings() throws IOException {
+        String concatenate = calculator.concatenate(numFilepath);
+        assertThat(concatenate).isEqualTo(" ");
+    }
 }
