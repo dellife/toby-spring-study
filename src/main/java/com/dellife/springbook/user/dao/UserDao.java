@@ -3,7 +3,6 @@ package com.dellife.springbook.user.dao;
 import com.dellife.springbook.user.domain.User;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -25,6 +24,17 @@ public class UserDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    private RowMapper<User> userMapper = new RowMapper<User>() {
+        @Override
+        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+            User user = new User();
+            user.setId(rs.getString("id"));
+            user.setName(rs.getString("name"));
+            user.setPassword(rs.getString("password"));
+            return user;
+        }
+    };
+
     public void add(final User user) throws SQLException {
         this.jdbcTemplate.update(
                 new PreparedStatementCreator() {
@@ -43,17 +53,7 @@ public class UserDao {
 
     public User get(String id) {
         return this.jdbcTemplate.queryForObject("select * from users where id = ?",
-                new Object[]{id},
-                new RowMapper<User>() {
-                    @Override
-                    public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        User user = new User();
-                        user.setId(rs.getString("id"));
-                        user.setName(rs.getString("name"));
-                        user.setPassword(rs.getString("password"));
-                        return user;
-                    }
-                });
+                new Object[]{id}, this.userMapper);
     }
 
     public void deleteAll() throws SQLException {
@@ -73,15 +73,6 @@ public class UserDao {
 
     public List<User> getAll() {
         return this.jdbcTemplate.query("select * from users order by id",
-                new RowMapper<User>() {
-                    @Override
-                    public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        User user = new User();
-                        user.setId(rs.getString("id"));
-                        user.setName(rs.getString("name"));
-                        user.setPassword(rs.getString("password"));
-                        return user;
-                    }
-                });
+                this.userMapper);
     }
 }
