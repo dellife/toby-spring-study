@@ -18,9 +18,12 @@ public class UserDao {
     private DataSource dataSource;
     private ConnectionMaker connectionMaker;
     private User user;
-
     private JdbcContext jdbcContext;
 
+    public void setDataSource(DataSource dataSource) {
+        this.jdbcContext = new JdbcContext(dataSource);
+        this.dataSource = dataSource;
+    }
 
     public void add(final User user) throws SQLException {
         this.jdbcContext.workWithStatementStrategy(

@@ -11,11 +11,6 @@ import javax.sql.DataSource;
 public class DaoFactory {
 
     @Bean
-    public JdbcContext jdbcContext() {
-        return new JdbcContext(dataSource());
-    }
-
-    @Bean
     public UserDao userDao() {
         UserDao userDao = new UserDao();
         userDao.setDataSource(dataSource());
