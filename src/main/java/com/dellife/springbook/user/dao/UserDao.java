@@ -3,11 +3,10 @@ package com.dellife.springbook.user.dao;
 import com.dellife.springbook.user.domain.User;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -45,30 +44,19 @@ public class UserDao {
 
     }
 
-    public User get(String id) throws SQLException, EmptyResultDataAccessException {
-        Connection c = dataSource.getConnection();
-
-        PreparedStatement ps = c.prepareStatement("select * from users where id = ?");
-        ps.setString(1, id);
-
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            this.user = new User();
-            user.setId(rs.getString("id"));
-            user.setName(rs.getString("name"));
-            user.setPassword(rs.getString("password"));
-        }
-
-        rs.close();
-        ps.close();
-        c.close();
-
-        if (user == null) {
-            throw new EmptyResultDataAccessException(1);
-        }
-
-        return user;
-
+    public User get(String id) {
+        return this.jdbcTemplate.queryForObject("select * from users where id = ?",
+                new Object[]{id},
+                new RowMapper<User>() {
+                    @Override
+                    public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        User user = new User();
+                        user.setId(rs.getString("id"));
+                        user.setName(rs.getString("name"));
+                        user.setPassword(rs.getString("password"));
+                        return user;
+                    }
+                });
     }
 
     public void deleteAll() throws SQLException {
