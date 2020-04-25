@@ -24,18 +24,19 @@ public class UserDao {
     }
 
     public void add(final User user) throws SQLException {
-        StatementStrategy st = new StatementStrategy() {
+        jdbcContextWithStatementStrategy(
+                new StatementStrategy() {
 
-            public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
-                PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values (?, ?, ?)");
+                    public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+                        PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values (?, ?, ?)");
 
-                ps.setString(1, user.getId());
-                ps.setString(2, user.getName());
-                ps.setString(3, user.getPassword());
-                return ps;
-            }
-        };
-        jdbcContextWithStatementStrategy(st);
+                        ps.setString(1, user.getId());
+                        ps.setString(2, user.getName());
+                        ps.setString(3, user.getPassword());
+                        return ps;
+                    }
+                }
+        );
     }
 
     public User get(String id) throws SQLException, EmptyResultDataAccessException {
@@ -65,8 +66,13 @@ public class UserDao {
     }
 
     public void deleteAll() throws SQLException {
-        StatementStrategy strategy = new DeleteAllStatement();
-        jdbcContextWithStatementStrategy(strategy);
+        jdbcContextWithStatementStrategy(
+                new StatementStrategy() {
+                    public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+                        return c.prepareStatement("delete from users");
+                    }
+                }
+        );
     }
 
     public void jdbcContextWithStatementStrategy(StatementStrategy stmt) throws SQLException {
