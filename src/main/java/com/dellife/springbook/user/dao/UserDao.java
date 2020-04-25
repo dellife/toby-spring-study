@@ -4,12 +4,9 @@ import com.dellife.springbook.user.domain.User;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -36,19 +33,8 @@ public class UserDao {
     };
 
     public void add(final User user) throws SQLException {
-        this.jdbcTemplate.update(
-                new PreparedStatementCreator() {
-                    @Override
-                    public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                        PreparedStatement ps = con.prepareStatement("insert into users(id, name, password) values (?, ?, ?)");
-                        ps.setString(1, user.getId());
-                        ps.setString(2, user.getName());
-                        ps.setString(3, user.getPassword());
-                        return ps;
-                    }
-                }
-        );
-
+        this.jdbcTemplate.update("insert into users(id, name, password) values (?, ?, ?)",
+                user.getId(), user.getName(), user.getPassword());
     }
 
     public User get(String id) {
@@ -57,14 +43,7 @@ public class UserDao {
     }
 
     public void deleteAll() throws SQLException {
-        this.jdbcTemplate.update(
-                new PreparedStatementCreator() {
-                    @Override
-                    public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                        return con.prepareStatement("delete from users");
-                    }
-                }
-        );
+        this.jdbcTemplate.update("delete from users");
     }
 
     public int getCount() {
