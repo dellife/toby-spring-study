@@ -26,6 +26,7 @@ class UserDaoTest2 {
         DataSource dataSource = new SingleConnectionDataSource(
                 "jdbc:mysql://localhost:3306/settler", "admin", "admin123", true);
         dao.setDataSource(dataSource);
+        dao.setJdbcContext(new JdbcContext(dataSource));
         this.user1 = new User("sehee", "ㅁㅁㅁ", "asdf");
         this.user2 = new User("unique", "ㄴㄴㄴ", "asdasd");
         this.user3 = new User("dellife", "ㅇㅇㅇ", "asdasd");
