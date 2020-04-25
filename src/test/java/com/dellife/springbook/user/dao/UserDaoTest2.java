@@ -22,6 +22,7 @@ class UserDaoTest2 {
 
     @BeforeEach
     void setUp() {
+
         dao = new UserDao();
         DataSource dataSource = new SingleConnectionDataSource(
                 "jdbc:mysql://localhost:3306/settler", "admin", "admin123", true);

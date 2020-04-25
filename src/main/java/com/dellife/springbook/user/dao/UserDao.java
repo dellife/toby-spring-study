@@ -19,14 +19,8 @@ public class UserDao {
     private ConnectionMaker connectionMaker;
     private User user;
 
-    public UserDao(ConnectionMaker connectionMaker) {
-        this.connectionMaker = connectionMaker;
-    }
     private JdbcContext jdbcContext;
 
-    public UserDao(JdbcContext jdbcContext) {
-        this.jdbcContext = jdbcContext;
-    }
 
     public void add(final User user) throws SQLException {
         this.jdbcContext.workWithStatementStrategy(
