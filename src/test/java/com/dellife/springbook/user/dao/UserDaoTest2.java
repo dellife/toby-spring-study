@@ -1,6 +1,7 @@
 package com.dellife.springbook.user.dao;
 
 import com.dellife.springbook.user.domain.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -108,7 +109,18 @@ class UserDaoTest2 {
         checkSameUser(user1, users3.get(1));
         checkSameUser(user2, users3.get(2));
 
+    }
 
+    @Test
+    void addThrowException() throws SQLException {
+
+        dao.deleteAll();
+        assertThat(dao.getCount()).isEqualTo(0);
+
+        dao.add(user1);
+        Assertions.assertThrows(DuplicateUserIdException.class, () -> {
+            dao.add(user1);
+        });
     }
 
     private void checkSameUser(User user1, User user2) {

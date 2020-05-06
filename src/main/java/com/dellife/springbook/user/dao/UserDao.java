@@ -1,7 +1,6 @@
 package com.dellife.springbook.user.dao;
 
 import com.dellife.springbook.user.domain.User;
-import com.mysql.cj.exceptions.MysqlErrorNumbers;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.dao.DuplicateKeyException;
@@ -34,19 +33,12 @@ public class UserDao {
         }
     };
 
-    public void add(User user) throws DuplicateKeyException {
+    public void add(User user) throws DuplicateUserIdException {
         try {
-            // JDBC를 이용해 user 정보를 DB에 추가하는 코드 또는
-            // 그런 기능이 있는 다른 SQLException을 던지는 메소드를 호출하는 코드
-
             this.jdbcTemplate.update("insert into users(id, name, password) values (?, ?, ?)",
                     user.getId(), user.getName(), user.getPassword());
-        } catch (SQLException e) {
-            if (e.getErrorCode() == MysqlErrorNumbers.ER_DUP_ENTRY) {
-                throw new DuplicateUserIdException(e); // 예외 전환
-            } else {
-                throw new RuntimeException(e);   //예외 포장
-            }
+        } catch (DuplicateKeyException e) {
+            throw new DuplicateUserIdException(e);
         }
     }
 
