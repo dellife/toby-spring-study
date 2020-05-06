@@ -15,9 +15,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class UserDaoTest2 {
+class UserDaoJdbcTest {
 
-    private UserDao dao;
+    private UserDaoJdbc dao;
 
     private User user1;
     private User user2;
@@ -26,7 +26,7 @@ class UserDaoTest2 {
     @BeforeEach
     void setUp() {
 
-        dao = new UserDao();
+        dao = new UserDaoJdbc();
         DataSource dataSource = new SingleConnectionDataSource(
                 "jdbc:mysql://localhost:3306/settler", "admin", "admin123", true);
         dao.setDataSource(dataSource);
