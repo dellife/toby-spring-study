@@ -4,6 +4,7 @@ import com.dellife.springbook.user.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
@@ -118,7 +119,7 @@ class UserDaoJdbcTest {
         assertThat(dao.getCount()).isEqualTo(0);
 
         dao.add(user1);
-        Assertions.assertThrows(DuplicateUserIdException.class, () -> {
+        Assertions.assertThrows(DataAccessException.class, () -> {
             dao.add(user1);
         });
     }
